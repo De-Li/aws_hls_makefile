@@ -59,7 +59,7 @@ $(info MK_PATH is set to: $(MK_PATH))
 all:
     @echo "MK_PATH is: $(MK_PATH)"
 
-COMMON_REPO ?= $(shell bash -c 'export MK_PATH=$(MK_PATH) #; echo $${MK_PATH}')
+COMMON_REPO ?= $(shell bash -c 'export MK_PATH=$(MK_PATH)) #; echo $${MK_PATH}')
 PWD = $(shell readlink -f .)
 XF_PROJ_ROOT = $(shell readlink -f $(COMMON_REPO))
 
