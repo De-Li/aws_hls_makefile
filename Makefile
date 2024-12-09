@@ -169,13 +169,15 @@ HOST_ARGS ?=
 run: all
 ifeq ($(TARGET),$(filter $(TARGET),sw_emu hw_emu))
 ifeq ($(HOST_ARCH), x86)
+	$(info Command: XCL_EMULATION_MODE=$(TARGET) $(EXECUTABLE) $(CMD_ARGS) $(HOST_ARGS))
 	$(CP) $(EMCONFIG_DIR)/emconfig.json .
-	XCL_EMULATION_MODE=$(TARGET) $(EXECUTABLE) $(CMD_ARGS) $(HOST_ARGS)
+	XCL_EMULATION_MODE=$(TARGET) $(EXECUTABLE) $(CMD_ARGS) $(strip $(HOST_ARGS))
 else
 	$(LAUNCH_EMULATOR) -run-app $(RUN_APP_SCRIPT) | tee run_app.log; exit $${PIPESTATUS[0]}
 endif
 else
 ifeq ($(HOST_ARCH), x86)
+	$(info Command: $(EXECUTABLE) $(CMD_ARGS) $(HOST_ARGS))
 	$(EXECUTABLE) $(CMD_ARGS) $(HOST_ARGS)
 endif
 endif
