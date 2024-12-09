@@ -51,7 +51,15 @@ help::
 ############################## Setting up Project Variables ##############################
 # Points to top directory of Git repository
 MK_PATH := $(abspath $(lastword $(MAKEFILE_LIST)))
-COMMON_REPO ?= $(shell bash -c 'export MK_PATH=$(MK_PATH); echo $${MK_PATH}')
+
+# Debug: Print the value of MK_PATH
+$(info MK_PATH is set to: $(MK_PATH))
+
+# Example target
+all:
+    @echo "MK_PATH is: $(MK_PATH)"
+
+COMMON_REPO ?= $(shell bash -c 'export MK_PATH=$(MK_PATH) #; echo $${MK_PATH}')
 PWD = $(shell readlink -f .)
 XF_PROJ_ROOT = $(shell readlink -f $(COMMON_REPO))
 
