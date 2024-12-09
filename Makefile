@@ -85,7 +85,7 @@ RESULT_STRING = TEST PASSED
 
 VPP := v++
 VPP_PFLAGS := 
-CMD_ARGS = -x $(BUILD_DIR)/hls.xclbin
+CMD_ARGS = -x $(BUILD_DIR)/forward.xclbin
 SDCARD := sd_card
 
 include $(XF_PROJ_ROOT)/common/includes/opencl/opencl.mk
@@ -118,13 +118,13 @@ endif
 
 
 
-EXECUTABLE = ./test_hls
+EXECUTABLE = ./test_forward
 EMCONFIG_DIR = $(TEMP_DIR)
 EMU_DIR = $(SDCARD)/data/emulation
 
 ############################## Declaring Binary Containers ##############################
-BINARY_CONTAINERS += $(BUILD_DIR)/hls.xclbin
-BINARY_CONTAINER_hls_OBJS += $(TEMP_DIR)/hls.xo
+BINARY_CONTAINERS += $(BUILD_DIR)/forward.xclbin
+BINARY_CONTAINER_forward_OBJS += $(TEMP_DIR)/forward.xo
 
 ############################## Setting Targets ##############################
 CP = cp -rf
@@ -142,16 +142,16 @@ build: check-vitis check-device $(BINARY_CONTAINERS)
 xclbin: build
 
 ############################## Setting Rules for Binary Containers (Building Kernels) ##############################
-$(TEMP_DIR)/hls.xo: llama_xrt_kernels/src/forward.cpp
+$(TEMP_DIR)/forward.xo: llama_xrt_kernels/src/forward.cpp
 	mkdir -p $(TEMP_DIR)
-	$(VPP) $(VPP_FLAGS) -c -k hls --temp_dir $(TEMP_DIR)  -I'$(<D)' -o'$@' '$<'
-$(BUILD_DIR)/hls.xclbin: $(BINARY_CONTAINER_hls_OBJS)
+	$(VPP) $(VPP_FLAGS) -c -k forward --temp_dir $(TEMP_DIR)  -I'$(<D)' -o'$@' '$<'
+$(BUILD_DIR)/forward.xclbin: $(BINARY_CONTAINER_forward_OBJS)
 	mkdir -p $(BUILD_DIR)
 ifeq ($(HOST_ARCH), x86)
-	$(VPP) $(VPP_FLAGS) -l $(VPP_LDFLAGS) --temp_dir $(TEMP_DIR) -o'$(BUILD_DIR)/hls.link.xclbin' $(+)
-	$(VPP) -p $(BUILD_DIR)/hls.link.xclbin -t $(TARGET) --platform $(PLATFORM) --package.out_dir $(PACKAGE_OUT) -o $(BUILD_DIR)/hls.xclbin
+	$(VPP) $(VPP_FLAGS) -l $(VPP_LDFLAGS) --temp_dir $(TEMP_DIR) -o'$(BUILD_DIR)/forward.link.xclbin' $(+)
+	$(VPP) -p $(BUILD_DIR)/forward.link.xclbin -t $(TARGET) --platform $(PLATFORM) --package.out_dir $(PACKAGE_OUT) -o $(BUILD_DIR)/forward.xclbin
 else
-	$(VPP) $(VPP_FLAGS) -l $(VPP_LDFLAGS) --temp_dir $(TEMP_DIR) -o'$(BUILD_DIR)/hls.xclbin' $(+)
+	$(VPP) $(VPP_FLAGS) -l $(VPP_LDFLAGS) --temp_dir $(TEMP_DIR) -o'$(BUILD_DIR)/forward.xclbin' $(+)
 endif
 
 ############################## Setting Rules for Host (Building Host Executable) ##############################
@@ -198,7 +198,7 @@ endif
 ############################## Preparing sdcard ##############################
 sd_card: $(BINARY_CONTAINERS) $(EXECUTABLE) gen_run_app
 ifneq ($(HOST_ARCH), x86)
-	$(VPP) $(VPP_PFLAGS) -p $(BUILD_DIR)/hls.xclbin -t $(TARGET) --platform $(PLATFORM) --package.out_dir $(PACKAGE_OUT) --package.rootfs $(EDGE_COMMON_SW)/rootfs.ext4 --package.sd_file $(SD_IMAGE_FILE) --package.sd_file xrt.ini --package.sd_file $(RUN_APP_SCRIPT) --package.sd_file $(EXECUTABLE) -o hls.xclbin
+	$(VPP) $(VPP_PFLAGS) -p $(BUILD_DIR)/forward.xclbin -t $(TARGET) --platform $(PLATFORM) --package.out_dir $(PACKAGE_OUT) --package.rootfs $(EDGE_COMMON_SW)/rootfs.ext4 --package.sd_file $(SD_IMAGE_FILE) --package.sd_file xrt.ini --package.sd_file $(RUN_APP_SCRIPT) --package.sd_file $(EXECUTABLE) -o forward.xclbin
 endif
 
 ############################## Cleaning Rules ##############################
