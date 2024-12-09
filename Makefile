@@ -163,17 +163,20 @@ $(EMCONFIG_DIR)/emconfig.json:
 	emconfigutil --platform $(PLATFORM) --od $(EMCONFIG_DIR)
 
 ############################## Setting Essential Checks and Running Rules ##############################
+# derry: Add a variable to accept user-provided arguments
+HOST_ARGS ?=
+
 run: all
 ifeq ($(TARGET),$(filter $(TARGET),sw_emu hw_emu))
 ifeq ($(HOST_ARCH), x86)
 	$(CP) $(EMCONFIG_DIR)/emconfig.json .
-	XCL_EMULATION_MODE=$(TARGET) $(EXECUTABLE) $(CMD_ARGS)
+	XCL_EMULATION_MODE=$(TARGET) $(EXECUTABLE) $(CMD_ARGS) $(HOST_ARGS)
 else
 	$(LAUNCH_EMULATOR) -run-app $(RUN_APP_SCRIPT) | tee run_app.log; exit $${PIPESTATUS[0]}
 endif
 else
 ifeq ($(HOST_ARCH), x86)
-	$(EXECUTABLE) $(CMD_ARGS)
+	$(EXECUTABLE) $(CMD_ARGS) $(HOST_ARGS)
 endif
 endif
 
