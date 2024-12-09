@@ -845,8 +845,8 @@ int main(int argc, char *argv[])
 {
   std::cout << "start" << std::endl;
   // default parameters
-  std::string checkpoint_path = "../../weights.bin"; // e.g. out/model.bin
-  std::string tokenizer_path = "../../tokenizer.bin";
+  std::string checkpoint_path = "weights.bin"; // e.g. out/model.bin
+  std::string tokenizer_path = "tokenizer.bin";
   float temperature = 1.0f;        // 0.0 = greedy deterministic. 1.0 = original. don't set higher
   float topp = 0.9f;               // top-p in nucleus sampling. 1.0 = off. 0.9 works well, but slower
   int steps = 256;                 // number of steps to run for
@@ -854,7 +854,7 @@ int main(int argc, char *argv[])
   unsigned long long rng_seed = 0; // seed rng with time by default
   const char *mode = "generate";   // generate|chat
   char *system_prompt = NULL;      // the (optional) system prompt to use in chat mode
-  std::string kernelpath = "../../llama_xrt_kernels/src";
+  std::string kernelpath = "";
 /*
   // poor man's C argparse so we can override the defaults above from the command line
   if (argc >= 2)
