@@ -14,6 +14,8 @@
 #include "forward.h"
 #include "config.h"
 
+#include "cmdlineparser.h"
+
 #include <xrt/xrt_bo.h>
 #include <xrt/xrt_device.h>
 #include <xrt/xrt_kernel.h>
@@ -843,6 +845,7 @@ void error_usage()
 
 int main(int argc, char *argv[])
 {
+  sda::utils::CmdLineParser parser;
   std::cout << "start" << std::endl;
   // default parameters
   std::string checkpoint_path = "weights.bin"; // e.g. out/model.bin
@@ -855,6 +858,20 @@ int main(int argc, char *argv[])
   const char *mode = "generate";   // generate|chat
   char *system_prompt = NULL;      // the (optional) system prompt to use in chat mode
   std::string kernelpath = "";
+
+  
+
+    // Switches
+    //**************//"<Full Arg>",  "<Short Arg>", "<Description>", "<Default>"
+    parser.addSwitch("--xclbin_file", "-x", "input binary file string", "");
+    parser.addSwitch("--device_id", "-d", "device index", "0");
+    parser.parse(argc, argv);
+  kernelpath = parser.value("xclbin_file");
+  int device_index = stoi(parser.value("device_id"));
+  std::cout << "xclbin:" << kernelpath << std::endl;
+
+  
+  
 /*
   // poor man's C argparse so we can override the defaults above from the command line
   if (argc >= 2)
