@@ -118,7 +118,7 @@ endif
 
 
 
-EXECUTABLE = ./submission
+EXECUTABLE = ./test_forward
 EMCONFIG_DIR = $(TEMP_DIR)
 EMU_DIR = $(SDCARD)/data/emulation
 
