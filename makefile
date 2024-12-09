@@ -134,7 +134,7 @@ build: check-vitis check-device $(BINARY_CONTAINERS)
 xclbin: build
 
 ############################## Setting Rules for Binary Containers (Building Kernels) ##############################
-$(TEMP_DIR)/hls.xo: llama_xrt/src/llama2.cpp
+$(TEMP_DIR)/hls.xo: llama_xrt_kernels/src/forward.cpp
 	mkdir -p $(TEMP_DIR)
 	$(VPP) $(VPP_FLAGS) -c -k hls --temp_dir $(TEMP_DIR)  -I'$(<D)' -o'$@' '$<'
 $(BUILD_DIR)/hls.xclbin: $(BINARY_CONTAINER_hls_OBJS)
