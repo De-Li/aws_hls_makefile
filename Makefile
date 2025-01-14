@@ -148,7 +148,7 @@ $(TEMP_DIR)/forward.xo: llama_xrt_kernels/src/forward.cpp
 $(BUILD_DIR)/forward.xclbin: $(BINARY_CONTAINER_forward_OBJS)
 	mkdir -p $(BUILD_DIR)
 ifeq ($(HOST_ARCH), x86)
-	$(VPP) $(VPP_FLAGS) -l $(VPP_LDFLAGS) --profile.data all:all:all --temp_dir $(TEMP_DIR) -o'$(BUILD_DIR)/forward.link.xclbin' $(+)
+	$(VPP) $(VPP_FLAGS) -l $(VPP_LDFLAGS) --profile.data kernel:all:all --temp_dir $(TEMP_DIR) -o'$(BUILD_DIR)/forward.link.xclbin' $(+)
 	$(VPP) -p $(BUILD_DIR)/forward.link.xclbin -t $(TARGET) --platform $(PLATFORM) --package.out_dir $(PACKAGE_OUT) -o $(BUILD_DIR)/forward.xclbin
 else
 	$(VPP) $(VPP_FLAGS) -l $(VPP_LDFLAGS) --profile.data all:all:all --temp_dir $(TEMP_DIR) -o'$(BUILD_DIR)/forward.xclbin' $(+)
